@@ -1,0 +1,188 @@
+import React, { Component } from "react";
+
+import "./styles.css";
+
+var pages = {
+  start: {
+    content: (getData, setData) => (
+      <p>
+        Welcome to the Bean Advanture, Are you ready?
+        <br />
+        Let's get started!
+        <br />
+        <br />
+        What name you want to give to your little character?
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("name")}
+          onChange={event => setData("name", event.target.value)}
+        />
+        <br />
+        <br />
+        what kind of bean is your character?
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("kind")}
+          onChange={event => setData("kind", event.target.value)}
+        />
+        <br />
+        <br />
+        How is your character feeling right now?
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("feeling")}
+          onChange={event => setData("feeling", event.target.value)}
+        />
+        <br />
+        <br />
+      </p>
+    ),
+    buttons: [{ label: "Continue", page: "welcome" }]
+  },
+
+  welcome: {
+    content: (getData, setData) => (
+      <p>
+        Welcome, {getData("feeling")} {getData("name")} !
+        <br />
+        <br />
+        What kind of bean dish you want to join in?
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("place")}
+          onChange={event => setData("place", event.target.value)}
+        />
+        <br />
+        <br />
+        You can go with your friend. Who you want to go with?
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("people")}
+          onChange={event => setData("people", event.target.value)}
+        />
+        <br />
+        <br />
+        What kind of bean is your friend?
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("find")}
+          onChange={event => setData("find", event.target.value)}
+        />
+        <br />
+        <br />
+        How is your friend feeling right now?
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("fffling")}
+          onChange={event => setData("fffling", event.target.value)}
+        />
+        <br />
+        <br />
+      </p>
+    ),
+    buttons: [{ label: "Continue", page: "continue" }]
+  },
+
+  continue: {
+    content: (getData, setData) => (
+      <p>
+        <br />
+        You have to leave your friend, what you want to say to him/her?
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("say")}
+          onChange={event => setData("say", event.target.value)}
+        />
+        <br />
+        <br />
+        What is the name of the person you and your friend hate?
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("shit")}
+          onChange={event => setData("shit", event.target.value)}
+        />
+        <br />
+        <br />
+      </p>
+    ),
+    buttons: [{ label: "Continue", page: "last" }]
+  },
+
+  last: {
+    content: (getData, setData) => (
+      <p>
+        Hi {getData("name")}! Can you realize that you already become a{" "}
+        {getData("feeling")} {getData("kind")} and your friend{" "}
+        {getData("people")} become a {getData("fffling")} {getData("find")}! Now
+        you guys are in {getData("place")}, and {getData("shit")} is about to
+        eat you guys! Right before being eaten, you yell to {getData("people")}:
+        "{getData("say")}" Then you all are eaten.
+        <br />
+        <br />
+        THE END
+      </p>
+    ),
+    buttons: [{ label: "Restart the game", page: "start" }]
+  }
+};
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      page: "start",
+      name: ""
+    };
+  }
+
+  goToPage(pageName) {
+    this.setState({
+      page: pageName
+    });
+  }
+
+  setData(dataName, dataValue) {
+    var newState = {};
+    newState[dataName] = dataValue;
+    this.setState(newState);
+  }
+
+  render() {
+    var pageData = pages[this.state.page];
+
+    return (
+      <div className="App">
+        {pageData.content(
+          dataName => this.state[dataName],
+          (name, value) => this.setData(name, value)
+        )}
+        {pageData.buttons.map(buttonInfo => (
+          <button onClick={() => this.goToPage(buttonInfo.page)}>
+            {buttonInfo.label}
+          </button>
+        ))}
+      </div>
+    );
+  }
+}
+
+export default App;
